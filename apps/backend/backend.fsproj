@@ -6,12 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="./src/domains/**/*.fs" />
+    <Compile Include="./src/usecases/**/*.fs" />
+    <Compile Include="./src/infrastructures/**/*.fs" />
+    <Compile Include="./src/controllers/**/*.fs" />
     <Compile Include="./src/Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper.FSharp" Version="4.8.0" />
     <PackageReference Include="Giraffe" Version="6.4.0" />
     <PackageReference Include="Saturn" Version="0.17.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
   </ItemGroup>
 
 </Project>

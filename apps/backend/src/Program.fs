@@ -1,41 +1,16 @@
-﻿open Giraffe
-open Saturn
-open Microsoft.AspNetCore.Http
+﻿open Saturn
+open Slack
+open System.Data.SQLite
 
-
-type Person = {
-  name: string
-  id: int
-}
-
-let person = { name = "test";  id = 1; }
-
-let getPersonById = fun personId ->
-  { name = "test"; id = personId  }
-
-type SlackChallenge = {
-  token: string
-  challenge: string
-}
-
-let handleSlackEvent = fun challenge ->
-  challenge.challenge
-
-let handle = fun (next: HttpFunc) (ctx: HttpContext) ->
-  task {
-    let! challenge = ctx.BindJsonAsync<SlackChallenge>()
-    let! _ = handleSlackEvent challenge |> ctx.WriteTextAsync
-    return! next ctx
-  }
+let conn = new SQLiteConnection("Data Source=state.db;Version=3")
 
 let routers = router {
-  post "/api/events/slack" (handle)
-  getf "/api/persons/%i" (fun personId -> getPersonById personId |> json)
+  forward "/slack" (SlackController.slackRouters conn)
 }
 
 let app = application {
   use_router routers
-  url "http://localhost:8080"
+  url "http://0.0.0.0:8080"
 }
 
 [<EntryPoint>]
